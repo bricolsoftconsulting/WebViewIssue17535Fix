@@ -37,7 +37,7 @@ To include this webview fix in your apps, follow these steps:
     mWebView.setWebViewClient(new WebViewClientEx(WebViewActivity.this, DEBUG));
     ```
 
-   Alternatively, if you want to use the `shouldOverrideUrlLoading` and `shouldInterceptRequest` events, then make sure that your implementation calls the superclass implementation and does not interfere with its functioning. Sample code is posted below:
+   Alternatively, if you want to override the `shouldOverrideUrlLoading` and `shouldInterceptRequest` events in `WebViewClient`, then make sure that your implementation calls the superclass implementation and does not interfere with its functioning. Sample code is posted below:
 
     ```java
     mWebView = (WebViewEx) findViewById(R.id.webview);
