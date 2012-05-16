@@ -5,7 +5,7 @@ What is this project?
 ---------------------
 This project is a workaround for Android issue 17535: http://code.google.com/p/android/issues/detail?id=17535
 
-Issue 17535 affects the webview on Honeycomb and ICS. Android apps typically load HTML files from the app assets folder into the webview via special android_asset URLs. On Honeycomb and ICS, if the android_asset URLs contain parameters (e.g. `file:///android_asset/mypage.html?test=test`) or anchors (e.g. `file:///android_asset/mypage.html#test`), the webview incorrectly displays a page not found error -- even though the file exists.
+Issue 17535 affects the webview on Honeycomb and ICS. Hybrid Android apps typically load HTML files from the app assets folder into the webview via special android_asset URLs. On Honeycomb and ICS, if the android_asset URLs contain parameters (e.g. `file:///android_asset/mypage.html?test=test`) or anchors (e.g. `file:///android_asset/mypage.html#test`), the webview incorrectly displays a page not found error -- even though the file exists.
 
 This workaround fixes the problem completely and allows you to use both parameters and anchors in android_asset URLs. The project is provided as a JAR, so you can easily include it in your app.
 
