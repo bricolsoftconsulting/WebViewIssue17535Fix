@@ -41,7 +41,7 @@ To include this webview fix in your apps, follow these steps:
 
     ```java
     mWebView = (WebViewEx) findViewById(R.id.webview);
-    mWebView.setWebViewClient(new MyWebViewClient(WebViewActivity.this, DEBUG)
+    mWebView.setWebViewClient(new WebViewClientEx(WebViewActivity.this, DEBUG)
     {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url)
