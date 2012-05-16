@@ -5,7 +5,7 @@ What is this project?
 ---------------------
 This project is a workaround for Android issue 17535: http://code.google.com/p/android/issues/detail?id=17535
 
-Issue 17535 affects the webview on Honeycomb and ICS. Android apps typically load HTML files from the app assets folder into the webview via special android_asset URLs (e.g. `file:///android_asset/mypage.html`). On Honeycomb and ICS, if the android_asset URLs contain parameters (e.g. `file:///android_asset/mypage.html?test=test`) or anchors (e.g. `file:///android_asset/mypage.html#test`), the webview incorrectly displays a page not found error -- even though the file exists.
+Issue 17535 affects the webview on Honeycomb and ICS. Android apps typically load HTML files from the app assets folder into the webview via special android_asset URLs. On Honeycomb and ICS, if the android_asset URLs contain parameters (e.g. `file:///android_asset/mypage.html?test=test`) or anchors (e.g. `file:///android_asset/mypage.html#test`), the webview incorrectly displays a page not found error -- even though the file exists.
 
 This workaround fixes the problem completely and allows you to use both parameters and anchors in android_asset URLs. The project is provided as a JAR, so you can easily include it in your app.
 
@@ -27,10 +27,10 @@ To include this webview fix in your apps, follow these steps:
 1. Download a copy of the JAR from the following URL: https://github.com/bricolsoftconsulting/WebViewIssue17535Fix/raw/master/bin/webviewissue17535fix.jar
 2. Add the JAR to your project.
 
-   How you do this will depend on the specific tools you use. For example, in Eclipse you can right click on your project in `Package Explorer`, select `Properties` from the context menu, select `Java Build Path` on the left hand side of the Properties dialog, click the `Add External JAR Button` in the dialog and finally browse to and select the `WebViewIssue17535Fix.jar` file.
+   How you do this will depend on the specific tools you use. For example, in Eclipse you can right click on your project in `Package Explorer`, select `Properties` from the context menu, select `Java Build Path` on the left hand side of the Properties dialog, click the `Add External JAR` button in the dialog and finally browse to and select the `WebViewIssue17535Fix.jar` file.
    
 3. Locate all `WebView` references in your XML layouts and change them to `com.bricolsoftconsulting.webview.WebViewEx`.
-4. When initializing each `WebViewEx` object, provide a reference to a `WebViewClientEx` object
+4. When initializing each `WebViewEx` object in your code, provide a reference to a `WebViewClientEx` object:
 
     ```java
     mWebView = (WebViewEx) findViewById(R.id.webview);
@@ -81,7 +81,7 @@ To include this webview fix in your apps, follow these steps:
    
    The optional debug parameter in the `WebViewClientEx` constructor helps out during development when the HTML files are still changing. It instructs the program to always remove previous versions from the HTML cache. In release mode, once an HTML file is in the cache, it is not copied again from the assets.
 
-5. Make sure that your Android manifest declares a target SDK version of at least 11
+5. Make sure that your Android manifest declares a target SDK version of at least 11:
 
     ```java
     <uses-sdk android:targetSdkVersion="11" />
@@ -89,7 +89,7 @@ To include this webview fix in your apps, follow these steps:
     
    If using Eclipse, also make sure that you change the Android target in the project properties.
 
-6. Add the appropriate permissions to your manifest, as shown below:
+6. Add the appropriate webview permissions to your manifest, as shown below:
 
     ```java
     <uses-permission android:name="android.permission.INTERNET" />
