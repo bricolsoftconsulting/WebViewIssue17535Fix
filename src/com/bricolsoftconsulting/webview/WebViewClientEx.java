@@ -135,7 +135,7 @@ public class WebViewClientEx extends WebViewClient
 		if (mDebug) destFile.delete();
 
 		File destParentDir = destFile.getParentFile();
-		destParentDir.mkdir();
+		destParentDir.mkdirs();
 
 		InputStream in = null;
 		OutputStream out = null;
