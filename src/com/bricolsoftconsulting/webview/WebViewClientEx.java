@@ -31,7 +31,6 @@ package com.bricolsoftconsulting.webview;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
-import android.os.Build;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebResourceResponse;
@@ -45,23 +44,16 @@ public class WebViewClientEx extends WebViewClient
 {	
 	// Members
 	private Context mContext;
-	private boolean mDebug;
 
 	// Constructors
 	public WebViewClientEx(Context context)
 	{
-		init(context, false);
-	}
-	
-	public WebViewClientEx(Context context, boolean debug)
-	{
-		init(context, debug);
+		init(context);
 	}
     
-	private void init(Context context, boolean debug)
+	private void init(Context context)
 	{
 		mContext = context;
-		mDebug = debug;
 	}
 
 	// Overriden functions
@@ -69,7 +61,7 @@ public class WebViewClientEx extends WebViewClient
 	public boolean shouldOverrideUrlLoading(WebView view, String url)
 	{		
 		// Handle android:///asset URLs
-		if ((view instanceof WebViewEx) && ((WebViewEx)(view)).isAffectedUrl(url))
+		if ((view instanceof WebViewEx) && WebViewEx.isAffectedUrl(url))
 		{
 			view.loadUrl(url);
 			return true;
@@ -98,7 +90,7 @@ public class WebViewClientEx extends WebViewClient
 	// Utility functions
 	private boolean needsCacheCopy(String url, String cacheRootUrl)
 	{
-		return (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && url.startsWith(cacheRootUrl)  && ((mDebug == false)?(getFileSize(getPathFromUrl(url)) == 0):true));
+		return (WebViewEx.isAffectedOsVersion() && url.startsWith(cacheRootUrl));
 	}
 	
 	public long getFileSize(String filePath)
@@ -131,8 +123,6 @@ public class WebViewClientEx extends WebViewClient
 		AssetManager assetManager = mContext.getAssets();
 
 		File destFile = new File(destFileName);
-
-		if (mDebug) destFile.delete();
 
 		File destParentDir = destFile.getParentFile();
 		destParentDir.mkdirs();

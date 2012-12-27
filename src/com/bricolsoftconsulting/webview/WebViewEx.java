@@ -40,6 +40,7 @@ public class WebViewEx extends WebView
 {
 	// Constants
 	private static final String ANDROID_ASSET = "file:///android_asset/";
+	private static final int SDK_INT_JELLYBEAN = 16;
 
 	// Members
 	private String mCacheRootPath;
@@ -107,9 +108,14 @@ public class WebViewEx extends WebView
 		}
 	}
 
-	public boolean isAffectedUrl(String url)
+	public static boolean isAffectedUrl(String url)
 	{
-		return (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && URLUtil.isAssetUrl(url));
+		return (isAffectedOsVersion() && URLUtil.isAssetUrl(url));
+	}
+	
+	public static boolean isAffectedOsVersion()
+	{
+		return (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && android.os.Build.VERSION.SDK_INT < SDK_INT_JELLYBEAN);
 	}
 	
 	public String getCacheUrlFromAssetUrl(String url)
