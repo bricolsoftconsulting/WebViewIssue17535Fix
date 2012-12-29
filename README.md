@@ -30,53 +30,69 @@ To include this webview fix in your apps, follow these steps:
    How you do this will depend on the specific tools you use. For example, in Eclipse you can right click on your project in `Package Explorer`, select `Properties` from the context menu, select `Java Build Path` on the left hand side of the Properties dialog, click the `Add External JAR` button in the dialog and finally browse to and select the `WebViewIssue17535Fix.jar` file.
    
 3. Locate all `WebView` references in your XML layouts and change them to `com.bricolsoftconsulting.webview.WebViewEx`.
-4. When initializing each `WebViewEx` object in your code, provide a reference to a `WebViewClientEx` object:
+4. When initializing each `WebViewEx` object in your code, always provide a reference to a `WebViewClientEx` object:
 
     ```java
     mWebView = (WebViewEx) findViewById(R.id.webview);
     mWebView.setWebViewClient(new WebViewClientEx(WebViewActivity.this));
     ```
 
-   Alternatively, if you want to override the `shouldOverrideUrlLoading` and `shouldInterceptRequest` events in `WebViewClient`, then make sure that your implementation calls the superclass implementation and does not interfere with its functioning. Sample code is posted below:
+   If you want to override the `shouldOverrideUrlLoading` and `shouldInterceptRequest` events you need to use `shouldOverrideUrlLoadingEx` and `shouldInterceptRequestEx` instead. Sample code is posted below:
 
     ```java
     mWebView = (WebViewEx) findViewById(R.id.webview);
     mWebView.setWebViewClient(new WebViewClientEx(WebViewActivity.this)
     {
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url)
+        public boolean shouldOverrideUrlLoadingEx(WebView view, String url)
         {
-            // Special handling for shouldOverrideUrlLoading
-            // Make sure that we call the base class implementation and do not interfere
-            // with the base class redirects
-            boolean redirected = super.shouldOverrideUrlLoading(view, url);
-				
-            // Do your own redirects here and set the return flag
-            if (!redirected)
+            // Override shouldOverrideUrlLoadingEx instead of shouldOverrideUrlLoading
+            
+            // Optional, if you need the original non-cache url
+            if (view instanceof WebViewEx)
             {
-                // mWebView.loadUrl("sample.html")
-                // redirected = true;
+                url = ((WebViewEx)view).getNonCacheUrl(url);
             }
 
-            return redirected;
+            // Do your own url replacements here
+            if (...)
+            {
+                ...
+                return true;
+            }
+
+            return false;
         }
 
         @Override
-        public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+        public WebResourceResponse shouldInterceptRequestEx(WebView view, String url)
         {
-            // Special handling for shouldInterceptRequest
-            // Make sure that we call the base class implementation
-            WebResourceResponse wrr = super.shouldInterceptRequest(view, url);
+            // Override shouldInterceptRequestEx instead of shouldInterceptRequest
+
+            // Optional, if you need the original non-cache url
+            if (view instanceof WebViewEx)
+            {
+                url = ((WebViewEx)view).getNonCacheUrl(url);
+            }
 
             // Do your own resource replacements here
-            if (wrr == null)
+            if (...)
             {
-                // wrr = new WebResourceResponse...
+                wrr = new WebResourceResponse...
             }
 				
             return wrr;
         }
     });
+    ```
+    
+    Any event type function in WebViewEx, WebViewClientEx or WebChromeClient that contains an `url` parameter will now return a cache URL for affected asset URLs. If you need to get the original non-cache URL you can use the code below:
+    
+    ```java
+    if (view instanceof WebViewEx)
+    {
+        url = ((WebViewEx)view).getNonCacheUrl(url);
+    }
     ```
 
 5. Make sure that your Android manifest declares a target SDK version of at least 11:

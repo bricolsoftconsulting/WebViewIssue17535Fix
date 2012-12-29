@@ -98,7 +98,7 @@ public class WebViewEx extends WebView
 	// Utility functions
 	public String getLoadUrl(String url)
 	{
-		if (isAffectedUrl(url))
+		if (isAffectedAssetUrl(url))
 		{
 			return getCacheUrlFromAssetUrl(url);
 		}
@@ -107,10 +107,27 @@ public class WebViewEx extends WebView
 			return url;
 		}
 	}
-
-	public static boolean isAffectedUrl(String url)
+	
+	public String getNonCacheUrl(String url)
 	{
-		return (isAffectedOsVersion() && URLUtil.isAssetUrl(url));
+		if (isCacheUrl(url))
+		{
+			return getAssetUrlFromCacheUrl(url);
+		}
+		else
+		{
+			return url;
+		}
+	}
+	
+	public boolean isCacheUrl(String url)
+	{
+		return (isAffectedOsVersion() && url != null && url.startsWith(getCacheRootUrl()));
+	}
+
+	public static boolean isAffectedAssetUrl(String url)
+	{
+		return (isAffectedOsVersion() && url != null && URLUtil.isAssetUrl(url));
 	}
 	
 	public static boolean isAffectedOsVersion()
@@ -121,6 +138,11 @@ public class WebViewEx extends WebView
 	public String getCacheUrlFromAssetUrl(String url)
 	{
 		return url.replaceFirst(ANDROID_ASSET, getCacheRootUrl());
+	}
+	
+	public String getAssetUrlFromCacheUrl(String url)
+	{
+		return url.replaceFirst(getCacheRootUrl(), ANDROID_ASSET);
 	}
 
 	// Accessors

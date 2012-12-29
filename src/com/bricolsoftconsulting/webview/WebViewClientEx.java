@@ -58,20 +58,20 @@ public class WebViewClientEx extends WebViewClient
 
 	// Overriden functions
 	@Override
-	public boolean shouldOverrideUrlLoading(WebView view, String url)
+	public final boolean shouldOverrideUrlLoading(WebView view, String url)
 	{		
 		// Handle android:///asset URLs
-		if ((view instanceof WebViewEx) && WebViewEx.isAffectedUrl(url))
+		if ((view instanceof WebViewEx) && WebViewEx.isAffectedAssetUrl(url))
 		{
 			view.loadUrl(url);
 			return true;
 		}
 
-		return false;
+		return shouldOverrideUrlLoadingEx(view, url);
 	}
 
 	@Override
-	public WebResourceResponse shouldInterceptRequest(WebView view, String url)
+	public final WebResourceResponse shouldInterceptRequest(WebView view, String url)
 	{
 		if (view instanceof WebViewEx)
 		{
@@ -84,6 +84,17 @@ public class WebViewClientEx extends WebViewClient
 			}
 		}
 
+		return shouldInterceptRequestEx(view, url);
+	}
+	
+	// Overridable functions for extending the class
+	public boolean shouldOverrideUrlLoadingEx(WebView view, String url)
+	{
+		return false;
+	}
+	
+	public WebResourceResponse shouldInterceptRequestEx(WebView view, String url)
+	{
 		return null;
 	}
 
