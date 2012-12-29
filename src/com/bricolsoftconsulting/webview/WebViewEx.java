@@ -64,6 +64,7 @@ public class WebViewEx extends WebView
 		init(context);
 	}
 
+	@SuppressWarnings("deprecation")
 	public WebViewEx(Context context, AttributeSet attrs, int defStyle, boolean privateBrowsing)
 	{
 		super(context, attrs, defStyle, privateBrowsing);
